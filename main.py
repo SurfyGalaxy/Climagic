@@ -16,34 +16,20 @@ As an apology for taking so long with review and everything else we have been de
 
 Come to Crux, the best horizons event down under."""
 
-def split_but_better(string, split):
-    temp = string
-    output = []
-    for words in temp:
-            b = []
-            for e in words:
-                    b.append(e)
-            output.append(b)
-    return output
-
-
-def split_string(string):
-    punctuation = ["! ", "? "]
-
-    temp = []
-    a = []
-    for words in paragraphs:
-        temp.append(words.split(". "))
-
-    return split_but_better(split_but_better(temp, "! "), "? ")
-
 paragraphs = string.split("\n\n")
 
-fullstop = 0
-exclamation = 0
-question = 0
 text = []
 for paragraph in paragraphs:
+    data = {
+"text": '',
+"fullstops": 0,
+"exclamation": 0,
+"question": 0,
+"punctuation_percent": 0.0
+}
+    fullstop = 0
+    exclamation = 0
+    question = 0
     temp = []
     for char in paragraph:
         if char == '.':
@@ -52,18 +38,33 @@ for paragraph in paragraphs:
             exclamation += 1
         elif char == '?':
             question += 1
-    a = paragraph.split(".")
+    a = paragraph.split(". ")
     for b in a:
-        c = b.split("!")
+        c = b.split("! ")
         for d in c:
-            e = d.split("?")
+            e = d.split("? ")
             for f in e:
                 temp.append(e)
-    print(temp)
-    text.append(temp)
+    
+    word_list = []
+    for sentence in temp:
+        sentence = sentence[0]
+        words = sentence.split()
+        word_list.append(words)
+    
+    raw_words = paragraph.split()
 
-print(f"Fullstops: {fullstop}")
-print(f"Exclamation: {exclamation}")
-print(f"Question: {question}")
+    
+    percent = ((exclamation + question) / (fullstop + exclamation + question)) * 100
+
+    data["text"] = word_list
+    data["fullstops"] = fullstop
+    data["exclamation"] = exclamation
+    data["question"] = question
+    data["punctuation_percent"] = percent
+    text.append(data)
+
+print(text[0])
+
 
 # text[paragraph][sentence][word]
