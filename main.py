@@ -19,8 +19,13 @@ As an apology for taking so long with review and everything else we have been de
 Come to Crux, the best horizons event down under."""
 
 paragraphs = string.split("\n\n")
-
 text = []
+total_fullstops = 0
+total_exclamation = 0
+total_question = 0
+total_word_count = 0
+total_nouns = 0
+total_verbs = 0
 for paragraph in paragraphs:
     data = {
 "text": '',
@@ -71,20 +76,34 @@ for paragraph in paragraphs:
         elif tag.startswith("VB"):
             verbs += 1
     word_count = len(raw_words)
+    punc_percent = ((exclamation + question) / (fullstop + exclamation + question)) * 100
+    nound = (nouns / word_count)
+    verbd = (verbs / word_count)
+
+    total_fullstops += fullstop
+    total_exclamation += exclamation
+    total_question += question
+    total_word_count += word_count
+    total_nouns += nouns
+    total_verbs += verbs
 
     data["text"] = paragraph
     data["fullstops"] = fullstop
     data["exclamation"] = exclamation
     data["question"] = question
-    data["punctuation_percent"] = ((exclamation + question) / (fullstop + exclamation + question)) * 100
+    data["punctuation_percent"] = punc_percent
     data["word_count"] = word_count
     data["nouns"] = nouns
     data["verbs"] = verbs
-    data["noun_density"] = (nouns / word_count)
-    data["verb_density"] = (verbs / word_count)
+    data["noun_density"] = nound
+    data["verb_density"] = verbd
     text.append(data)
 
-print(text[0])
+total_punc_percent = ((total_exclamation + total_question) / (total_fullstops + total_exclamation + total_question)) * 100
+total_noun_density = (total_nouns / total_word_count)
+total_verb_density = (total_verbs / total_word_count)
 
+text.append(dict(fullstops = total_fullstops, exclamation = total_exclamation, question = total_question, punctuation_percent = total_punc_percent, word_count = total_word_count, nouns = total_nouns, verbs = total_verbs, noun_density = total_noun_density, verb_density = total_verb_density))
 
+print(text)
 # text[paragraph][sentence][word]
