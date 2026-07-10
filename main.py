@@ -1,3 +1,5 @@
+import nltk
+
 string = """:crux: 2 Big Announcements For Crux! :crux: 
 
 First Up: Horizons Crux parents call!
@@ -25,12 +27,20 @@ for paragraph in paragraphs:
 "fullstops": 0,
 "exclamation": 0,
 "question": 0,
-"punctuation_percent": 0.0
+"punctuation_percent": 0.0,
+"word_count": 0,
+"nouns": 0,
+"verbs": 0,
+"noun_density": 0,
+"verb_density": 0
 }
     fullstop = 0
     exclamation = 0
     question = 0
+    nouns = 0
+    verbs = 0
     temp = []
+
     for char in paragraph:
         if char == '.':
             fullstop += 1
@@ -53,15 +63,25 @@ for paragraph in paragraphs:
         word_list.append(words)
     
     raw_words = paragraph.split()
+    tag_words = nltk.pos_tag(raw_words)
 
-    
-    percent = ((exclamation + question) / (fullstop + exclamation + question)) * 100
+    for word, tag in tag_words:
+        if tag.startswith("NN"):
+            nouns += 1
+        elif tag.startswith("VB"):
+            verbs += 1
+    word_count = len(raw_words)
 
-    data["text"] = word_list
+    data["text"] = paragraph
     data["fullstops"] = fullstop
     data["exclamation"] = exclamation
     data["question"] = question
-    data["punctuation_percent"] = percent
+    data["punctuation_percent"] = ((exclamation + question) / (fullstop + exclamation + question)) * 100
+    data["word_count"] = word_count
+    data["nouns"] = nouns
+    data["verbs"] = verbs
+    data["noun_density"] = (nouns / word_count)
+    data["verb_density"] = (verbs / word_count)
     text.append(data)
 
 print(text[0])
