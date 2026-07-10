@@ -26,6 +26,7 @@ total_question = 0
 total_word_count = 0
 total_nouns = 0
 total_verbs = 0
+total_fullcaps = 0
 for paragraph in paragraphs:
     data = {
 "text": '',
@@ -37,7 +38,9 @@ for paragraph in paragraphs:
 "nouns": 0,
 "verbs": 0,
 "noun_density": 0,
-"verb_density": 0
+"verb_density": 0,
+"fullcaps": 0,
+"fullcaps_density": 0
 }
     fullstop = 0
     exclamation = 0
@@ -45,6 +48,7 @@ for paragraph in paragraphs:
     nouns = 0
     verbs = 0
     temp = []
+    fullcaps = 0
 
     for char in paragraph:
         if char == '.':
@@ -66,6 +70,11 @@ for paragraph in paragraphs:
         sentence = sentence[0]
         words = sentence.split()
         word_list.append(words)
+
+        for word in words:
+            if word.isupper():
+                fullcaps += 1
+    
     
     raw_words = paragraph.split()
     tag_words = nltk.pos_tag(raw_words)
@@ -76,9 +85,10 @@ for paragraph in paragraphs:
         elif tag.startswith("VB"):
             verbs += 1
     word_count = len(raw_words)
-    punc_percent = ((exclamation + question) / (fullstop + exclamation + question)) * 100
+    punc_percent = (exclamation + question) / (fullstop + exclamation + question)
     nound = (nouns / word_count)
     verbd = (verbs / word_count)
+    fcapsd = (fullcaps / word_count)
 
     total_fullstops += fullstop
     total_exclamation += exclamation
@@ -86,6 +96,7 @@ for paragraph in paragraphs:
     total_word_count += word_count
     total_nouns += nouns
     total_verbs += verbs
+    total_fullcaps += fullcaps
 
     data["text"] = paragraph
     data["fullstops"] = fullstop
@@ -97,13 +108,28 @@ for paragraph in paragraphs:
     data["verbs"] = verbs
     data["noun_density"] = nound
     data["verb_density"] = verbd
+    data["fullcaps"] = fullcaps
+    data["fullcaps_density"] = fcapsd
     text.append(data)
 
 total_punc_percent = ((total_exclamation + total_question) / (total_fullstops + total_exclamation + total_question)) * 100
 total_noun_density = (total_nouns / total_word_count)
 total_verb_density = (total_verbs / total_word_count)
+total_fcapsd = (total_fullcaps / total_word_count)
 
-text.append(dict(fullstops = total_fullstops, exclamation = total_exclamation, question = total_question, punctuation_percent = total_punc_percent, word_count = total_word_count, nouns = total_nouns, verbs = total_verbs, noun_density = total_noun_density, verb_density = total_verb_density))
+text.append(dict(
+fullstops = total_fullstops, 
+exclamation = total_exclamation, 
+question = total_question, 
+punctuation_percent = total_punc_percent, 
+word_count = total_word_count, 
+nouns = total_nouns, 
+verbs = total_verbs, 
+noun_density = total_noun_density, 
+verb_density = total_verb_density,
+fullcaps = total_fullcaps,
+fullcaps_density = total_fcapsd
+))
 
 print(text)
 # text[paragraph][sentence][word]
