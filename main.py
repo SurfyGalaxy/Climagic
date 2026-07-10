@@ -38,14 +38,32 @@ def split_string(string):
     return split_but_better(split_but_better(temp, "! "), "? ")
 
 paragraphs = string.split("\n\n")
-sentences = split_string(string)
 
+fullstop = 0
+exclamation = 0
+question = 0
 text = []
-for e in sentences:
-    one = []
-    for a in e:
-        one.append(a.split())
-    text.append(one)
-print(text[0][0][0])
+for paragraph in paragraphs:
+    temp = []
+    for char in paragraph:
+        if char == '.':
+            fullstop += 1
+        elif char == '!':
+            exclamation += 1
+        elif char == '?':
+            question += 1
+    a = paragraph.split(".")
+    for b in a:
+        c = b.split("!")
+        for d in c:
+            e = d.split("?")
+            for f in e:
+                temp.append(e)
+    print(temp)
+    text.append(temp)
+
+print(f"Fullstops: {fullstop}")
+print(f"Exclamation: {exclamation}")
+print(f"Question: {question}")
 
 # text[paragraph][sentence][word]
