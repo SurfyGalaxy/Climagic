@@ -4,6 +4,10 @@
 
 1. Get the most recent release from <a href="https://github.com/SurfyGalaxy/Climagic/releases">the releases tab</a>. Grab the one that matches your OS (e.g. main.Linux for a Linux OS)
 
+## Installation (Others)
+
+See usage below, we couldnt build working binaries for windows and because we HAVE to use Actions to compile because none of us have macs it makes testing hard. Soz.
+
 ## Usage (Linux)
 
 1. Run the file (It may take a little to open)
@@ -12,7 +16,7 @@
 
 3. Select a file to examine (`.txt` files work best)
 
-## Usage (Windows)
+## Usage (Windows and Mac)
 
 1. Git clone / get a zip
 
