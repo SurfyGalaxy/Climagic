@@ -1,8 +1,9 @@
-import nltk
+import nltk,json
 from nltk.corpus import cmudict
 import yaml
 from types import SimpleNamespace
 nltk.download('cmudict')
+nltk.download('averaged_perceptron_tagger_eng')
 cmu = cmudict.dict()
 
 with open("config.yaml") as f:
@@ -213,7 +214,7 @@ def process_text(string: str) -> list:
         data["fullcaps_density"] = fcapsd
         data["kinclaid_reading_ease"] = kinclaid
         data["kinclaid_grade"] = kinclaid_grade
-        data["unique_words"] = unique_words
+        data["unique_words"] = list(unique_words)
         data["repeated_words"] = repeated_words
         text.append(data)
 
@@ -247,9 +248,10 @@ def process_text(string: str) -> list:
     fullcaps_density = total_fcapsd,
     kinclaid_reading_ease = total_kinclaid,
     kinclaid_grade = total_kinclaid_grade,
-    unique_words = total_unique_words,
+    unique_words = list(total_unique_words),
     repeated_words = total_repeated_word
     ))
+    print(json.dumps(text))
     return text
 
 if __name__ == "__main__":

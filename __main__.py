@@ -64,6 +64,7 @@ class HybridApp(QMainWindow):
         self.channel = QWebChannel(self)
         self.channel.registerObject("backend", self.backend)
         self.browser.page().setWebChannel(self.channel)
+        # self.browser.load(QUrl("http://127.0.0.1:5500/ui/"))
         self.browser.load(QUrl("https://surfygalaxy.github.io/Climagic/"))
 
 if __name__ == "__main__":

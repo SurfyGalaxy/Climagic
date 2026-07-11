@@ -11,8 +11,8 @@ html {
 
 body {
     margin: 0;
-    max-width: var(--w);
-    max-height: var(--h);
+    max-width: 100vw;
+    max-height: 100vh;
     overflow: hidden;
 }
 
@@ -43,7 +43,8 @@ div.app {
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    min-height: calc(var(--h));
+    /* min-height: calc(var(--h)); */
+    min-height: calc(100vh - 20px);
 }
 
 .title {
@@ -90,7 +91,8 @@ div.app .c {
     /* Keep everything contained */
 }
 
-.initial .c button.select {
+.initial .c button.select,
+button.openfile {
     flex: none;
     flex-grow: 0;
     background: #00b9be;
@@ -118,11 +120,27 @@ div.app .c {
     }
 }
 
-.initial .c button.continue {
+button.reload,
+button.openfile {
+    display: inline-block;
+    width: fit-content;
+    font-size: 30px;
+    line-height: 32px;
+}
+.buttonrow{
+    display: flex;
+    gap: 15px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.initial .c button.continue,
+button.reload {
     padding: 5px 30px;
     border: 0px;
-    width: 208px;
-    height: 42px;
+    /* width: 208px;
+    height: 42px; */
     background: #9ff4e5;
     /* opacity: 0; */
     box-shadow: 0px 4px 0px #9ff4e5,
@@ -151,7 +169,13 @@ div.app .c {
     color: #fff;
     font-size: 2em;
     text-align: center;
-    overflow: scroll;
+    overflow-y: auto;
+    scrollbar-width: 0px;
+
+}
+
+.textanim::-webkit-scrollbar {
+    display: none;
 }
 
 .textanim,
@@ -183,7 +207,7 @@ div.app .c {
     align-items: flex-start;
     padding: 10px 0px;
     gap: 15px;
-
+    width: 100vw;
     background: #002B59;
 
     & .topbar {
@@ -191,7 +215,8 @@ div.app .c {
         flex-direction: column;
         align-items: flex-start;
         padding: 0px 10px;
-        width: calc(var(--w) - 20px);
+        /* width: calc(var(--w) - 20px); */
+        width: calc(100vw - 20px);
         flex: none;
         order: 0;
         flex-grow: 0;
@@ -249,6 +274,7 @@ div.app .c {
     font-size: 47.56px;
     line-height: 48px;
 }
+
 .area-subtitle {
     font-family: 'Jersey 20';
     font-style: normal;
@@ -257,6 +283,7 @@ div.app .c {
     font-size: 20px;
     line-height: 20px;
 }
+
 .stat {
     font-family: 'Jersey 20';
     font-style: normal;
@@ -306,6 +333,15 @@ div.app .c {
     overflow-y: auto;
     font-family: 'Jersey 20';
     font-size: 15pt;
+}
+
+.story .para {
+    display: block;
+
+    &:hover,
+    &.active {
+        background-color: rgba(255, 255, 255, 0.285);
+    }
 }
 
 /* Auto layout */
