@@ -1,6 +1,10 @@
 import nltk
 
-string = """q q q"""
+string = """q q q
+
+a
+
+a"""
 
 def add_word(word: str, word_list: list[tuple(str, int)]) -> list[tuple(str, int)]:
     for words in word_list:
@@ -9,7 +13,7 @@ def add_word(word: str, word_list: list[tuple(str, int)]) -> list[tuple(str, int
             value = words[1]
             word_list[index] = (word, value + 1)
             return word_list
-    word_list.append((word, 2))
+    word_list.append((word, 1))
     return word_list
 
 
@@ -23,6 +27,8 @@ def process_text(string: str) -> list:
     total_nouns = 0
     total_verbs = 0
     total_fullcaps = 0
+    total_unique_words = set()
+    total_repeated_word = []
 
     for paragraph in paragraphs:
         data = {
@@ -86,6 +92,9 @@ def process_text(string: str) -> list:
                     if word in unique_words:
                         unique_words.remove(word)
                     add_word(word, repeated_words)
+                    if b:
+                        add_word(word, repeated_words)
+                    
 
         raw_words = paragraph.split()
         tag_words = nltk.pos_tag(raw_words)
@@ -114,7 +123,25 @@ def process_text(string: str) -> list:
         total_fullcaps += fullcaps
 
         for word in unique_words:
-            pass
+            new = True
+            if word in total_unique_words:
+                total_unique_words.remove(word)
+                add_word(word, total_repeated_word)
+                for a in repeated_words:
+                    if a[0] == word:
+                        new = False
+                if new:
+                    add_word(word, total_repeated_word)
+            else:
+                total_unique_words.add(word)
+        
+        for word in repeated_words:
+            times = word[1]
+            actual_word = word[0]
+            while times > 0:
+                add_word(actual_word, total_repeated_word)
+                times -= 1
+
         data["text"] = paragraph
         data["fullstops"] = fullstop
         data["exclamation"] = exclamation
@@ -152,7 +179,9 @@ def process_text(string: str) -> list:
     fullcaps = total_fullcaps,
     noun_density = total_noun_density, 
     verb_density = total_verb_density,
-    fullcaps_density = total_fcapsd
+    fullcaps_density = total_fcapsd,
+    unique_words = total_unique_words,
+    repeated_words = total_repeated_word
     ))
 
     return text
