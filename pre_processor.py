@@ -161,10 +161,10 @@ def process_text(string: str) -> list:
         except ZeroDivisionError:
             punc_percent = 0
         
-        nound = (nouns / word_count)
-        verbd = (verbs / word_count)
-        fcapsd = (fullcaps / word_count)
-        avg_sent_len = (word_count / sentences)
+        nound = round((nouns / word_count), 3)
+        verbd = round((verbs / word_count), 3)
+        fcapsd = round((fullcaps / word_count), 3)
+        avg_sent_len = round((word_count / sentences), 3)
 
         total_fullstops += fullstop
         total_exclamation += exclamation
