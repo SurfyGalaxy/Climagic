@@ -1,0 +1,35 @@
+name: Build Windows X86_64
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+  steps:
+    - name: Checkout Source Code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.14' # Fixed key from 'python-file' to 'python-version'
+
+    - name: Install Python Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller PyQt6 PyQt6-WebEngine pyyaml nltk
+
+    - name: Compile Application with PyInstaller
+      run: |
+        pyinstaller main.spec
+
+    - name: Upload Executable Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Climagic-Windows
+        path: dist/main.exe  # PyInstaller creates a .exe on Windows
