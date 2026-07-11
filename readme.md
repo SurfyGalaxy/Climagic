@@ -1,16 +1,24 @@
 # Climagic
 
-## Installation
+## Installation (linux)
 
 1. Get the most recent release from <a href="https://github.com/SurfyGalaxy/Climagic/releases">the releases tab</a>. Grab the one that matches your OS (e.g. main.Linux for a Linux OS)
 
-## Usage
+## Usage (Linux)
 
 1. Run the file (It may take a little to open)
 
 2. When it loads, press `Select File`
 
 3. Select a file to examine (`.txt` files work best)
+
+## Usage (Windows)
+
+1. Git clone / get a zip
+
+2. run `pip install PyQt6 PyQt6-WebEngine pyyaml nltk`
+
+3. go in the folder and run `python3 .`
 
 ## Metrics:
 
