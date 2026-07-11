@@ -9,7 +9,7 @@ with open("config.yaml") as f:
     _config_data = yaml.safe_load(f)
 config = SimpleNamespace(**_config_data)
 
-string = """The"""
+string = """The quick brown fox jumps over the lazy dog"""
 
 def add_word(word: str, word_list: list[tuple(str, int)]) -> list[tuple(str, int)]:
     for words in word_list:
@@ -71,7 +71,8 @@ def process_text(string: str) -> list:
     "question": 0,
     "punctuation_percent": 0.0,
     "word_count": 0,
-    "sentences": 0,
+    "sentence_count": 0,
+    "avg_sentence_len": 0,
     "nouns": 0,
     "verbs": 0,
     "fullcaps": 0,
@@ -162,6 +163,7 @@ def process_text(string: str) -> list:
         nound = (nouns / word_count)
         verbd = (verbs / word_count)
         fcapsd = (fullcaps / word_count)
+        avg_sent_len = (word_count / sentences)
 
         total_fullstops += fullstop
         total_exclamation += exclamation
@@ -202,6 +204,7 @@ def process_text(string: str) -> list:
         data["punctuation_percent"] = punc_percent
         data["word_count"] = word_count
         data["sentence_count"] = sentences
+        data["avg_sentence_len"] = avg_sent_len
         data["nouns"] = nouns
         data["verbs"] = verbs
         data["fullcaps"] = fullcaps
@@ -224,6 +227,7 @@ def process_text(string: str) -> list:
     total_fcapsd = (total_fullcaps / total_word_count)
     total_kinclaid = round(206.835 - 1.015 * (total_word_count / total_sentences) - 84.6 * (total_syllables / total_word_count), 2)
     total_kinclaid_grade = get_kinclaid_grade(total_kinclaid)
+    total_avg_sent_len = (total_word_count / total_sentences)
 
 
     text.append(dict(
@@ -232,6 +236,8 @@ def process_text(string: str) -> list:
     question = total_question, 
     punctuation_percent = total_punc_percent, 
     word_count = total_word_count, 
+    sentence_count = total_sentences,
+    avg_sentence_len = total_avg_sent_len,
     paragraph_count = paragraph_count,
     nouns = total_nouns, 
     verbs = total_verbs, 
@@ -248,5 +254,4 @@ def process_text(string: str) -> list:
 
 data = process_text(string)
 
-print(data[len(data) - 1]["kinclaid_reading_ease"])
-print(data[len(data) - 1]["kinclaid_grade"])
+print(data)
