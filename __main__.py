@@ -19,12 +19,10 @@ class Backend(QObject):
     def handle_js_message(self, message_from_js):
         global fname
         msg = json.loads(message_from_js)
-        print(msg)
         
         if msg["act"] == "pick_file":
             name = QFileDialog.getOpenFileName(filter="Plain Text (*.txt);;All Files (*)",initialFilter="*.txt")
             fname = name[0]
-            print(name)
             self.python_message_signal.emit(json.dumps({"act":"picked", "name": os.path.basename(name[0])}))
             
         elif msg["act"] == "parsefile":

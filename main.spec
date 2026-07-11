@@ -12,6 +12,7 @@ a = Analysis(
         'pre_processor',
         'nltk',
         'yaml',
+        'PyQt6'
     ],
     hookspath=[],
     hooksconfig={},
