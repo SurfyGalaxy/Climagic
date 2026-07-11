@@ -1,12 +1,32 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QMessageBox, QFileDialog
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QMessageBox, QFileDialog, QSplashScreen
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtCore import Qt
+import sys
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtWebChannel import QWebChannel
 from PyQt6.QtCore import QObject, pyqtSlot, QUrl, pyqtSignal
 import json
 import os
 import traceback
-import sys
-import pre_processor
+# 1. Initialize the application immediately so we can show the splash screen
+app = QApplication(sys.argv)
+
+# 2. Create and show the splash screen
+# (You can replace this with a QPixmap("path/to/image.png") if you have an image)
+splash_pixmap = QPixmap(400, 200)
+splash_pixmap.fill(Qt.GlobalColor.darkBlue)  # Temporary solid background
+splash = QSplashScreen(splash_pixmap)
+splash.show()
+
+# Display a message on the splash screen
+splash.showMessage("Loading modules and preparing data...", Qt.AlignmentFlag.AlignCenter, Qt.GlobalColor.white)
+
+# Force PyQt to process events and actually draw the splash screen
+app.processEvents()
+
+# 3. Now perform the imports and heavy lifting while the splash screen is visible
+
+import pre_processor  # Your heavy module import
 
 fname = None
 
@@ -69,7 +89,15 @@ class HybridApp(QMainWindow):
         self.browser.load(QUrl("https://surfygalaxy.github.io/Climagic/"))
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
+# Update message if needed
+    splash.showMessage("Launching interface...", Qt.AlignmentFlag.AlignCenter, Qt.GlobalColor.white)
+    app.processEvents()
+    
+    # Initialize the main window
     window = HybridApp()
     window.show()
+    
+    # 4. Close the splash screen now that the main window is ready
+    splash.finish(window)
+    
     sys.exit(app.exec())
