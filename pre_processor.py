@@ -1,12 +1,19 @@
 import nltk,json
 from nltk.corpus import cmudict
-import yaml
+import yaml, os, sys
 from types import SimpleNamespace
 nltk.download('cmudict')
 nltk.download('averaged_perceptron_tagger_eng')
 cmu = cmudict.dict()
+def get_resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and PyInstaller --onefile """
+    if getattr(sys, 'frozen', False):
+        base_path = sys._MEIPASS
+    else:
+        base_path = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_path, relative_path)
 
-with open("config.yaml") as f:
+with open(get_resource_path("config.yaml")) as f:
     _config_data = yaml.safe_load(f)
 config = SimpleNamespace(**_config_data)
 
