@@ -1,12 +1,19 @@
 import nltk
 
-string = """q"""
+string = """q q q"""
+
+def add_word(word: str, word_list: list[tuple(str, int)]) -> list[tuple(str, int)]:
+    for words in word_list:
+        if words[0] == word:
+            index = word_list.index(words)
+            value = words[1]
+            word_list[index] = (word, value + 1)
+            return word_list
+    word_list.append((word, 2))
+    return word_list
 
 
-
-
-
-def process_text(string):
+def process_text(string: str) -> list:
     paragraphs = string.split("\n\n")
     text = []
     total_fullstops = 0
@@ -30,7 +37,9 @@ def process_text(string):
     "fullcaps": 0,
     "noun_density": 0,
     "verb_density": 0,
-    "fullcaps_density": 0
+    "fullcaps_density": 0,
+    "unique_words": set(),
+    "repeated_words": []
     }
         fullstop = 0
         exclamation = 0
@@ -56,6 +65,8 @@ def process_text(string):
                     temp.append(e)
         
         word_list = []
+        unique_words = set()
+        repeated_words = []
         for sentence in temp:
             sentence = sentence[0]
             words = sentence.split()
@@ -64,8 +75,18 @@ def process_text(string):
             for word in words:
                 if word.isupper():
                     fullcaps += 1
-        
-        
+
+                b = True
+                for a in repeated_words:
+                    if a[0] == word:
+                        b = False
+                if b and (word not in unique_words):
+                    unique_words.add(word)
+                else:
+                    if word in unique_words:
+                        unique_words.remove(word)
+                    add_word(word, repeated_words)
+
         raw_words = paragraph.split()
         tag_words = nltk.pos_tag(raw_words)
 
@@ -79,6 +100,7 @@ def process_text(string):
             punc_percent = (exclamation + question) / (fullstop + exclamation + question)
         except ZeroDivisionError:
             punc_percent = 0
+        
         nound = (nouns / word_count)
         verbd = (verbs / word_count)
         fcapsd = (fullcaps / word_count)
@@ -91,6 +113,8 @@ def process_text(string):
         total_verbs += verbs
         total_fullcaps += fullcaps
 
+        for word in unique_words:
+            pass
         data["text"] = paragraph
         data["fullstops"] = fullstop
         data["exclamation"] = exclamation
@@ -103,15 +127,19 @@ def process_text(string):
         data["noun_density"] = nound
         data["verb_density"] = verbd
         data["fullcaps_density"] = fcapsd
+        data["unique_words"] = unique_words
+        data["repeated_words"] = repeated_words
         text.append(data)
 
     try:
         total_punc_percent = ((total_exclamation + total_question) / (total_fullstops + total_exclamation + total_question)) * 100
     except ZeroDivisionError:
         total_punc_percent = 0
+    
     total_noun_density = (total_nouns / total_word_count)
     total_verb_density = (total_verbs / total_word_count)
     total_fcapsd = (total_fullcaps / total_word_count)
+
 
     text.append(dict(
     fullstops = total_fullstops, 
