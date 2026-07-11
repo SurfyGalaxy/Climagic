@@ -254,5 +254,4 @@ def process_text(string: str) -> list:
 
 if __name__ == "__main__":
     data = process_text(string)
-
-print(data)
+    print(data)
