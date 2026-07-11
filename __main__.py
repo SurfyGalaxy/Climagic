@@ -8,25 +8,21 @@ from PyQt6.QtCore import QObject, pyqtSlot, QUrl, pyqtSignal
 import json
 import os
 import traceback
-# 1. Initialize the application immediately so we can show the splash screen
+from time import time
 app = QApplication(sys.argv)
 
-# 2. Create and show the splash screen
-# (You can replace this with a QPixmap("path/to/image.png") if you have an image)
 splash_pixmap = QPixmap(400, 200)
 splash_pixmap.fill(Qt.GlobalColor.darkBlue)  # Temporary solid background
 splash = QSplashScreen(splash_pixmap)
 splash.show()
 
-# Display a message on the splash screen
 splash.showMessage("Loading modules and preparing data...", Qt.AlignmentFlag.AlignCenter, Qt.GlobalColor.white)
 
-# Force PyQt to process events and actually draw the splash screen
 app.processEvents()
 
-# 3. Now perform the imports and heavy lifting while the splash screen is visible
-
-import pre_processor  # Your heavy module import
+from sklearn.decomposition import NMF,LatentDirichletAllocation,MiniBatchNMF
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+import pre_processor
 
 fname = None
 
