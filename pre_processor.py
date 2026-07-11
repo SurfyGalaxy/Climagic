@@ -2,7 +2,7 @@ import nltk
 from nltk.corpus import cmudict
 import yaml
 from types import SimpleNamespace
-
+nltk.download('cmudict')
 cmu = cmudict.dict()
 
 with open("config.yaml") as f:
@@ -246,7 +246,8 @@ def process_text(string: str) -> list:
     ))
     return text
 
-data = process_text(string)
+if __name__ == "__main__":
+    data = process_text(string)
 
-print(data[len(data) - 1]["kinclaid_reading_ease"])
-print(data[len(data) - 1]["kinclaid_grade"])
+    print(data[len(data) - 1]["kinclaid_reading_ease"])
+    print(data[len(data) - 1]["kinclaid_grade"])
