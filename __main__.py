@@ -19,7 +19,7 @@ class Backend(QObject):
         print(msg)
         
         if msg["act"] == "pick_file":
-            name = QFileDialog.getOpenFileName(filter="*.txt")
+            name = QFileDialog.getOpenFileName(filter="*.txt,*"initialFilter="*")
             fname = name[0]
             print(name)
             self.python_message_signal.emit(json.dumps({"act":"picked", "name": os.path.basename(name[0])}))
