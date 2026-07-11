@@ -1,9 +1,35 @@
-# compilation instructions
-1.
-```bash
-pip install pyinstaller PyQt6 PyQt6-WebEngine pyyaml nltk
-```
-2.
-```bash
-pyinstaller main.spec
-```
+# Climagic
+
+## Installation
+
+### MacOS + Linux:
+
+1. Get the most recent release from <a href="https://github.com/SurfyGalaxy/Climagic/releases">the releases tab</a>
+
+### Windows:
+
+Lorum ipsum
+
+## Usage
+
+1. Run the file (It may take a little to open)
+
+2. When it loads, press `Select File`
+
+3. Select a file to examine (`.txt` files work best)
+
+## Metrics:
+
+### Flesch-Kincaid
+
+Flesch-Kincaid is a measure of a passage's readability, mapped to what level of education would be most likely to read and understand the passage.
+
+For more infomation on Flesch-Kincaid, look <a href="https://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_tests#Flesch_Reading-Ease">here</a>.
+
+### Expressive punctuation
+
+For this, expressive punctuation is defined as either a `?` or `!`, and the percentage is the amount of expressive punctuation compared to the total amount of punctuation (`?`, `!` or `.`)
+
+### Vocabulary variety
+
+The ratio of unique non-stop words to the total word count (stop words are taken from <a href="https://gist.github.com/sebleier/554280">here</a>)
