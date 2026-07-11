@@ -1,8 +1,14 @@
 import nltk
+import yaml
+from types import SimpleNamespace
+
+with open("config.yaml") as f:
+    _config_data = yaml.safe_load(f)
+config = SimpleNamespace(**_config_data)
 
 string = """q q q
 
-a
+aA
 
 a"""
 
@@ -47,6 +53,7 @@ def process_text(string: str) -> list:
     "unique_words": set(),
     "repeated_words": []
     }
+
         fullstop = 0
         exclamation = 0
         question = 0
@@ -82,18 +89,21 @@ def process_text(string: str) -> list:
                 if word.isupper():
                     fullcaps += 1
 
-                b = True
-                for a in repeated_words:
-                    if a[0] == word:
-                        b = False
-                if b and (word not in unique_words):
-                    unique_words.add(word)
-                else:
-                    if word in unique_words:
-                        unique_words.remove(word)
-                    add_word(word, repeated_words)
-                    if b:
+                word = word.lower()
+
+                if word not in config.EXCLUDED_WORDS:
+                    b = True
+                    for a in repeated_words:
+                        if a[0] == word:
+                            b = False
+                    if b and (word not in unique_words):
+                        unique_words.add(word)
+                    else:
+                        if word in unique_words:
+                            unique_words.remove(word)
                         add_word(word, repeated_words)
+                        if b:
+                            add_word(word, repeated_words)
                     
 
         raw_words = paragraph.split()
