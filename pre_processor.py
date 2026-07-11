@@ -1,12 +1,15 @@
 import nltk
+from nltk.corpus import cmudict
 import yaml
 from types import SimpleNamespace
+
+cmu = cmudict.dict()
 
 with open("config.yaml") as f:
     _config_data = yaml.safe_load(f)
 config = SimpleNamespace(**_config_data)
 
-string = """no"""
+string = """The"""
 
 def add_word(word: str, word_list: list[tuple(str, int)]) -> list[tuple(str, int)]:
     for words in word_list:
@@ -18,6 +21,31 @@ def add_word(word: str, word_list: list[tuple(str, int)]) -> list[tuple(str, int
     word_list.append((word, 1))
     return word_list
 
+def syllable_count(word: str) -> int:
+    word = word.lower()
+    
+    if word in cmu:
+        return [len([list for list in pron if list[-1].isdigit()]) for pron in cmu[word]][0]
+    return 0
+
+def get_kinclaid_grade(kinclaid: float) -> str:
+    if kinclaid > 90:
+        kinclaid_grade = "5th graders and under"
+    elif 90 <= kinclaid > 80:
+        kinclaid_grade = "6th graders"
+    elif 80 <= kinclaid > 70:
+        kinclaid_grade = "7th graders"
+    elif 70 <= kinclaid > 60:
+        kinclaid_grade = "8th/9th graders"
+    elif 60 <= kinclaid > 50:
+        kinclaid_grade = "10th graders"
+    elif 50 <= kinclaid > 30:
+        kinclaid_grade = "College students"
+    elif 30 <= kinclaid > 10:
+        kinclaid_grade = "College graduates"
+    else:
+        kinclaid_grade = "Professionals"
+    return kinclaid_grade
 
 def process_text(string: str) -> list:
     paragraphs = string.split("\n\n")
@@ -32,6 +60,8 @@ def process_text(string: str) -> list:
     total_unique_words = set()
     total_repeated_word = []
     paragraph_count = 0
+    total_syllables = 0
+    total_sentences = 0
 
     for paragraph in paragraphs:
         data = {
@@ -41,12 +71,15 @@ def process_text(string: str) -> list:
     "question": 0,
     "punctuation_percent": 0.0,
     "word_count": 0,
+    "sentences": 0,
     "nouns": 0,
     "verbs": 0,
     "fullcaps": 0,
     "noun_density": 0,
     "verb_density": 0,
     "fullcaps_density": 0,
+    "kinclaid_reading_ease": 0.0,
+    "kinclaid_grade": '',
     "unique_words": set(),
     "repeated_words": []
     }
@@ -58,6 +91,9 @@ def process_text(string: str) -> list:
         verbs = 0
         temp = []
         fullcaps = 0
+        syllables = 0
+        sentences = 0
+        sentence_word = 0
 
         for char in paragraph:
             if char == '.':
@@ -78,6 +114,7 @@ def process_text(string: str) -> list:
         unique_words = set()
         repeated_words = []
         for sentence in temp:
+            sentences += 1
             sentence = sentence[0]
             words = sentence.split()
             word_list.append(words)
@@ -88,7 +125,7 @@ def process_text(string: str) -> list:
 
                 word = word.lower()
 
-                if word not in config.EXCLUDED_WORDS:
+                if word not in config.EXCLUDED_WORDS: # Counting words
                     b = True
                     for a in repeated_words:
                         if a[0] == word:
@@ -101,7 +138,12 @@ def process_text(string: str) -> list:
                         add_word(word, repeated_words)
                         if b:
                             add_word(word, repeated_words)
-                    
+                sentence_word += 1
+                syllables += syllable_count(word)
+        
+        kinclaid = round(206.835 - 1.015 * (sentence_word / sentences) - 84.6 * (syllables / sentence_word), 2)
+        kinclaid_grade = get_kinclaid_grade(kinclaid)
+        
 
         raw_words = paragraph.split()
         tag_words = nltk.pos_tag(raw_words)
@@ -128,6 +170,8 @@ def process_text(string: str) -> list:
         total_nouns += nouns
         total_verbs += verbs
         total_fullcaps += fullcaps
+        total_sentences += sentences
+        total_syllables += syllables
 
         for word in unique_words:
             new = True
@@ -157,12 +201,15 @@ def process_text(string: str) -> list:
         data["question"] = question
         data["punctuation_percent"] = punc_percent
         data["word_count"] = word_count
+        data["sentence_count"] = sentences
         data["nouns"] = nouns
         data["verbs"] = verbs
         data["fullcaps"] = fullcaps
         data["noun_density"] = nound
         data["verb_density"] = verbd
         data["fullcaps_density"] = fcapsd
+        data["kinclaid_reading_ease"] = kinclaid
+        data["kinclaid_grade"] = kinclaid_grade
         data["unique_words"] = unique_words
         data["repeated_words"] = repeated_words
         text.append(data)
@@ -175,6 +222,8 @@ def process_text(string: str) -> list:
     total_noun_density = (total_nouns / total_word_count)
     total_verb_density = (total_verbs / total_word_count)
     total_fcapsd = (total_fullcaps / total_word_count)
+    total_kinclaid = round(206.835 - 1.015 * (total_word_count / total_sentences) - 84.6 * (total_syllables / total_word_count), 2)
+    total_kinclaid_grade = get_kinclaid_grade(total_kinclaid)
 
 
     text.append(dict(
@@ -190,11 +239,14 @@ def process_text(string: str) -> list:
     noun_density = total_noun_density, 
     verb_density = total_verb_density,
     fullcaps_density = total_fcapsd,
+    kinclaid_reading_ease = total_kinclaid,
+    kinclaid_grade = total_kinclaid_grade,
     unique_words = total_unique_words,
     repeated_words = total_repeated_word
     ))
-
     return text
 
 data = process_text(string)
-print(data)
+
+print(data[len(data) - 1]["kinclaid_reading_ease"])
+print(data[len(data) - 1]["kinclaid_grade"])
