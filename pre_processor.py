@@ -6,11 +6,7 @@ with open("config.yaml") as f:
     _config_data = yaml.safe_load(f)
 config = SimpleNamespace(**_config_data)
 
-string = """q q q
-
-aA
-
-a"""
+string = """no"""
 
 def add_word(word: str, word_list: list[tuple(str, int)]) -> list[tuple(str, int)]:
     for words in word_list:
@@ -35,6 +31,7 @@ def process_text(string: str) -> list:
     total_fullcaps = 0
     total_unique_words = set()
     total_repeated_word = []
+    paragraph_count = 0
 
     for paragraph in paragraphs:
         data = {
@@ -151,6 +148,8 @@ def process_text(string: str) -> list:
             while times > 0:
                 add_word(actual_word, total_repeated_word)
                 times -= 1
+        
+        paragraph_count += 1
 
         data["text"] = paragraph
         data["fullstops"] = fullstop
@@ -184,6 +183,7 @@ def process_text(string: str) -> list:
     question = total_question, 
     punctuation_percent = total_punc_percent, 
     word_count = total_word_count, 
+    paragraph_count = paragraph_count,
     nouns = total_nouns, 
     verbs = total_verbs, 
     fullcaps = total_fullcaps,
@@ -196,4 +196,5 @@ def process_text(string: str) -> list:
 
     return text
 
-print(process_text(string))
+data = process_text(string)
+print(data)
