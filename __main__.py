@@ -2,7 +2,10 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QMe
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtWebChannel import QWebChannel
 from PyQt6.QtCore import QObject, pyqtSlot, QUrl, pyqtSignal
-import json, os, traceback, sys
+import json
+import os
+import traceback
+import sys
 import pre_processor
 
 fname = None
