@@ -1,17 +1,52 @@
 <html>
-    <head>
-        <title>Climagic</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="styles.css" />
-    </head>
-    <body>
-        <div class="initial not-picked">
-            <span class="title">Climagic</span>
-            <span class="subtitle">Select a plaintext file to continue</span>
-            <div class="c">
-                <button class="select">Select File</button>
-                <button class="continue">Continue</button>
-            </div>
+
+<head>
+    <title>Climagic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+</head>
+
+<body>
+    <div class="initial not-picked">
+        <span class="title">Climagic</span>
+        <span class="subtitle">Select a plaintext file to continue</span>
+        <div class="c">
+            <button class="select">Select File</button>
+            <button class="continue">Continue</button>
         </div>
-    </body>
+    </div>
+    <div class="analysing" style="display: none;">
+        <span class="title">Climagic</span>
+        <span class="subtitle">Analysing... Please wait</span>
+        <div class="c">
+            <div class="textanim"></div>
+        </div>
+    </div>
+    <div class="app" style="display: none;">
+        <div class="topbar"><span class="title">Climagic</span><span class="subtitle">Story Intensity Overview · Click
+                to jump to section</span></div>
+        <svg id="wave-svg" class="waves" viewBox="0 0 1024 135" width="100%" height="135"></svg>
+        <div class="c">
+            <div class="area">
+                <span class="area-title">Story Viewer</span>
+                <textarea class="story"></textarea>
+            </div>
+            <div class="area">
+                <span class="area-title">Statistics</span>
+            </div>u
+        </div>
+    </div>
+    <svg style="">
+        <filter id="pixelate">
+            <feFlood x="2" y="2" height="1" width="1" />
+            <feComposite width="4" height="4" />
+            <feTile result="a" />
+            <feComposite in="SourceGraphic" in2="a" operator="in" />
+            <feMorphology operator="dilate" radius="2" />
+        </filter>
+    </svg>
+    <script src="script.js"></script>
+</body>
+
 </html>

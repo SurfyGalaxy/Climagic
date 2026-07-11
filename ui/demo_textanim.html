@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="textanim"></div>
+<svg style="">
+    <filter id="pixelate">
+        <feFlood x="2" y="2" height="1" width="1" />
+        <feComposite width="4" height="4" />
+        <feTile result="a" />
+        <feComposite in="SourceGraphic" in2="a" operator="in" />
+        <feMorphology operator="dilate" radius="2" />
+    </filter>
+</svg>
+
+    <script>
+        let chars = "abcdefghijklmnopqrstuvwxyz              ,.!?";
+        function doRandom(){
+            if(Math.round(Math.random())){
+                let c = chars[Math.floor(Math.random() * chars.length)]
+                console.log("added char", c)
+                document.querySelector(".textanim").textContent += c
+                setTimeout(doRandom,10)
+
+            }
+            else{
+            setTimeout(doRandom,100)
+                
+
+            }
+
+        }
+        setTimeout(doRandom,10)
+    </script>
+</body>
+
+</html>

@@ -1,10 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Jersey+10&family=Jersey+15&family=Jersey+20&display=swap");
 
-html,
+:root {
+    --w: 500px;
+    --h: 500px;
+}
+
+html {
+    background-color: #fff;
+}
+
 body {
     margin: 0;
-    width: calc(100vw - 40px);
-    height: calc(100vh - 40px);
+    max-width: var(--w);
+    max-height: var(--h);
+    overflow: hidden;
 }
 
 img.owo {
@@ -21,18 +30,20 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    /* padding: 20px; */
     gap: 10px;
     background: #002b59;
 }
 
-div.initial {
+div.initial,
+div.analysing,
+div.app {
     margin-top: -10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    height: calc(100vh - 40px);
+    height: calc(var(--h));
 }
 
 .title {
@@ -58,7 +69,9 @@ div.initial {
     color: #005f8c;
 }
 
-div.initial .c {
+div.initial .c,
+div.analysing .c,
+div.app .c {
     /* Inside auto layout */
     flex: 1;
     display: flex;
@@ -82,39 +95,469 @@ div.initial .c {
     flex: none;
     order: 0;
     flex-grow: 0;
-    padding:5px;
-    padding-left:30px;
-    padding-right:30px;
+    padding: 5px;
+    padding-left: 30px;
+    padding-right: 30px;
     font-family: "Jersey 15";
     font-style: normal;
     font-weight: 400;
     font-size: 39px;
     line-height: 39px;
-    border:0px;
+    border: 0px;
     color: #9ff4e5;
-    transition:background ease-in-out 0.1s;
-    &:active{
+    transition: background ease-in-out 0.1s;
+
+    &:active {
+        background: #9ff4e500;
+    }
+}
+
+.initial .c button.continue {
+    padding: 5px 30px;
+    border: 0px;
+    width: 208px;
+    height: 42px;
+    background: #9ff4e5;
+    /* opacity: 0; */
+    box-shadow: 0px 4px 0px #9ff4e5,
+        0px -4px 0px #9ff4e5,
+        4px 0px 0px #9ff4e5,
+        -4px 0px 0px #9ff4e5;
+    font-family: "Jersey 10";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 32px;
+    transition: background ease-in-out 0.1s;
+    color: #00b9be;
+
+    &:active {
         background: #00b8be00;
     }
 }
-.initial .c button.continue {
-padding: 5px 30px;
-border:0px;
-width: 208px;
-height: 42px;
-background: #9ff4e5;
-/* opacity: 0; */
-box-shadow: 0px 4px 0px #ffffff,
-0px -4px 0px #ffffff,
-4px 0px 0px #ffffff,
--4px 0px 0px #ffffff;
-font-family: "Jersey 10";
-font-style: normal;
-font-weight: 400;
-font-size: 30px;
-line-height: 32px;
-color: #00b9be;
-}
+
 .initial.not-picked .c button.continue {
     opacity: 0;
 }
+
+.textanim {
+    filter: url(#pixelate);
+    color: #fff;
+    font-size: 2em;
+    text-align: center;
+    overflow: scroll;
+}
+
+.textanim,
+.c {
+    max-height: calc(100% - 100px);
+
+}
+
+.initial,
+.analysing {
+    padding: 20px;
+}
+
+/* Style the interactive invisible bars for easy clicking */
+.click-target {
+    fill: transparent;
+    cursor: pointer;
+}
+
+.click-target:hover {
+    fill: rgba(255, 255, 255, 0.05);
+    /* Slight highlight on hover */
+}
+
+
+.app {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 0px;
+    gap: 15px;
+
+    background: #002B59;
+
+    & .topbar {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0px 10px;
+        width: calc(var(--w) - 20px);
+        flex: none;
+        order: 0;
+        flex-grow: 0;
+
+        & .title {
+            font-family: 'Jersey 20';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 47.56px;
+            line-height: 48px;
+            /* identical to box height */
+
+            color: #00B9BE;
+
+
+            /* Inside auto layout */
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+        }
+
+        & .subtitle {
+
+            font-family: 'Jersey 20';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 25.56px;
+            line-height: 26px;
+            /* identical to box height */
+
+            color: #9FF4E5;
+
+
+            /* Inside auto layout */
+            flex: none;
+            order: 1;
+            flex-grow: 0;
+        }
+    }
+}
+
+#chartline {
+    filter: drop-shadow(0px -4px 12px rgba(0, 153, 255, 0.5));
+}
+
+.area-title {
+    font-family: 'Jersey 20';
+    font-style: normal;
+    font-weight: 400;
+    color: #9FF4E5;
+    font-size: 47.56px;
+    line-height: 48px;
+}
+.app .c{
+    display: flex;
+    flex-direction: row !important;
+    gap:10px;
+    padding-left:10px;
+    padding-right:10px;
+    max-width: calc(100% - 20px);
+}
+.area{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    flex-grow: 1;
+}
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px 10px;
+gap: 10px;
+
+width: 1024px;
+height: 462px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* .sv */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: flex-start;
+padding: 0px 4px 4px;
+gap: 10px;
+
+width: 510px;
+height: 462px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Story Viewer */
+
+width: 233px;
+height: 48px;
+
+
+/* identical to box height */
+
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* ta */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 10px;
+gap: 10px;
+
+width: 502px;
+height: 400px;
+
+border: 2px solid #9FF4E5;
+filter: drop-shadow(0px 2px 0px #9FF4E5) drop-shadow(2px 0px 0px #9FF4E5) drop-shadow(0px -2px 0px #9FF4E5) drop-shadow(-2px 0px 0px #9FF4E5);
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Frame 10 */
+
+width: 446px;
+height: 1008px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris maximus diam ac condimentum sollicitudin. Nulla nec accumsan magna. Duis egestas euismod turpis non commodo. Suspendisse maximus dolor in erat hendrerit, vel aliquet augue commodo. Aliquam suscipit dictum nisl, sed convallis nulla elementum et. Donec fringilla tortor eget mauris vehicula tincidunt. Nam condimentum interdum suscipit. Aliquam efficitur massa quis leo pharetra porta. Aliquam efficitur leo eu cursus volutpat. Proin tristique vel neque ac feugiat. Integer quis aliquet odio. Phasellus interdum cursus porta. Integer semper dui ut felis iaculis pharetra. Suspendisse tincidunt diam velit, vel faucibus ligula convallis ac. Sed euismod augue eget quam pulvinar, ut placerat elit viverra. In quis leo id lorem consequat elementum. Vivamus lacinia, mi eget euismod suscipit, sapien ipsum molestie nibh, non rhoncus enim lectus in leo. Suspendisse pretium tristique enim sit amet finibus. Integer et est efficitur ipsum lacinia lobortis vitae ut diam. Praesent in est et tortor feugiat tincidunt sit amet at est. Aliquam mi dui, malesuada eget leo sed, accumsan ultrices tortor. */
+
+position: absolute;
+width: 446px;
+height: 868px;
+left: 0px;
+top: -0.24px;
+
+font-family: 'Jersey 20';
+font-style: normal;
+font-weight: 400;
+font-size: 28px;
+line-height: 28px;
+
+color: #9FF4E5;
+
+
+
+/* Rectangle 11 */
+
+position: absolute;
+width: 142px;
+height: 21px;
+left: -1px;
+top: 58.76px;
+
+background: rgba(255, 163, 0, 0.5);
+
+
+/* Frame 9 */
+
+width: 26px;
+height: 380px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame 8 */
+
+position: absolute;
+width: 26px;
+height: 380px;
+left: 0px;
+top: 0px;
+
+background: #00B9BE;
+box-shadow: 0px 2px 0px #00B9BE,
+0px -2px 0px #00B9BE,
+2px 0px 0px #00B9BE,
+-2px 0px 0px #00B9BE;
+
+
+/* Rectangle 10 */
+
+position: absolute;
+height: 26px;
+left: 0px;
+right: 0px;
+top: -0.24px;
+
+background: #9FF4E5;
+box-shadow: 0px 2px 0px #9FF4E5,
+0px -2px 0px #9FF4E5,
+2px 0px 0px #9FF4E5,
+-2px 0px 0px #9FF4E5;
+
+
+/* .stat */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px 10px;
+gap: 10px;
+
+width: 484px;
+height: 462px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 1;
+
+
+/* Statistics */
+
+width: 182px;
+height: 48px;
+
+font-family: 'Jersey 20';
+font-style: normal;
+font-weight: 400;
+font-size: 47.56px;
+line-height: 48px;
+/* identical to box height */
+
+color: #9FF4E5;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Flesch-Kincaid Score: ____ */
+
+width: 326px;
+height: 32px;
+
+font-family: 'Jersey 20';
+font-style: normal;
+font-weight: 400;
+font-size: 31.56px;
+line-height: 32px;
+/* identical to box height */
+
+color: #9FF4E5;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Frame 6 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 5px;
+gap: 10px;
+
+width: 464px;
+height: 168px;
+
+border: 2px solid #9FF4E5;
+filter: drop-shadow(0px 2px 0px #9FF4E5) drop-shadow(2px 0px 0px #9FF4E5) drop-shadow(0px -2px 0px #9FF4E5) drop-shadow(-2px 0px 0px #9FF4E5);
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Part of Speech Distrobution: */
+
+width: 454px;
+height: 32px;
+
+font-family: 'Jersey 20';
+font-style: normal;
+font-weight: 400;
+font-size: 31.56px;
+line-height: 32px;
+/* identical to box height */
+
+color: #9FF4E5;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Nouns: nn% Verbs: nn% Adjectives: nn% Adverbs: nn% */
+
+width: 454px;
+height: 116px;
+
+font-family: 'Jersey 20';
+font-style: normal;
+font-weight: 400;
+font-size: 28.56px;
+line-height: 29px;
+
+color: #9FF4E5;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Lexical Diversity: __/__ */
+
+width: 283px;
+height: 32px;
+
+font-family: 'Jersey 20';
+font-style: normal;
+font-weight: 400;
+font-size: 31.56px;
+line-height: 32px;
+/* identical to box height */
+
+color: #9FF4E5;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
